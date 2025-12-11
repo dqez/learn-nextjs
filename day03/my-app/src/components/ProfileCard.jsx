@@ -6,8 +6,13 @@ const ProfileCard = (props) => {
     const [likes, setLikes] = useState(0);
 
     useEffect(() => {
-        console.log(`[LOG] Component ProfileCard của ${name} đã loaded.`);
-    }, [])
+        console.log(`[MOUNT] Component ProfileCard của ${name} đã loaded.`);
+
+        return () => {
+            console.warn(`[UNMOUNT] Component ProfileCard của ${name} đã bị gỡ khỏi DOM.`)
+            //Chỗ này thì để xóa timer, ngắt connect websocket, hủy sự kiện, ...
+        }
+    }, [name]);
 
     const handleLike = () => {
         setLikes(likes + 1);
