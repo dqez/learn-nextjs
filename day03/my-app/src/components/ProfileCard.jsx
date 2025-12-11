@@ -12,7 +12,7 @@ const ProfileCard = (props) => {
             console.warn(`[UNMOUNT] Component ProfileCard của ${name} đã bị gỡ khỏi DOM.`)
             //Chỗ này thì để xóa timer, ngắt connect websocket, hủy sự kiện, ...
         }
-    }, [name]);
+    }, [name, likes]);
 
     const handleLike = () => {
         setLikes(likes + 1);
