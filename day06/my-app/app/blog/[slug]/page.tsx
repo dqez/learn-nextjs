@@ -1,5 +1,26 @@
+import { notFound } from "next/navigation";
+
+export async function generateStaticParams() {
+
+  const posts = [
+    { slug: '1' },
+    { slug: '2' },
+    { slug: '3' },
+  ];
+
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+}
+
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+
+  if (slug == '999') {
+    console.warn(`[SERVER] Không tìm thấy bài viết có ID: ${slug}`)
+
+    notFound();
+  }
 
   return (
     <div className="p-8 bg-white shadow-lg rounded-lg">
