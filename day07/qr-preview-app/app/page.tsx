@@ -3,7 +3,6 @@
 
 import { useState } from "react";
 import QRCode from "qrcode";
-import { unescape } from "querystring";
 
 export default function Home() {
   const [input, setInput] = useState('');
@@ -17,7 +16,11 @@ export default function Home() {
       const url = await QRCode.toDataURL(input, { width: 300, margin: 2 });
       setQrSrc(url);
 
-      const base64Text = btoa(unescape(encodeURIComponent(input)));
+      const base64Text = btoa(
+        encodeURIComponent(input).replace(/%([0-9A-F]{2})/g, (match, p1) =>
+          String.fromCharCode(parseInt(p1, 16))
+        )
+      );
 
       const origin = typeof window !== 'undefined' ? window.location.origin : '';
       setShareLink(`${origin}/share/${base64Text}`);
