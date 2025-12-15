@@ -22,8 +22,11 @@ export default function Home() {
         )
       );
 
+      const base64NoPadding = base64Text.replace(/=+$/, '');
+
+
       const origin = typeof window !== 'undefined' ? window.location.origin : '';
-      setShareLink(`${origin}/share/${base64Text}`);
+      setShareLink(`${origin}/share/${base64NoPadding}`);
     } catch (error) {
       console.error(error);
     }
@@ -49,6 +52,38 @@ export default function Home() {
     navigator.clipboard.writeText(shareLink);
     alert('Đã copy link');
   };
+
+  const copySmart = async () => {
+    if (!shareLink || !qrSrc) return;
+
+    try {
+      // 1. Chuyển đổi ảnh QR (Base64) thành dạng Blob (Binary)
+      // fetch(qrSrc) là cách nhanh nhất để biến DataURL thành Blob
+      const imgBlob = await fetch(qrSrc).then((r) => r.blob());
+
+      // 2. Tạo Blob cho đường link (Text)
+      const textBlob = new Blob([shareLink], { type: 'text/plain' });
+
+      // 3. Tạo một ClipboardItem chứa CẢ HAI định dạng
+      const item = new ClipboardItem({
+        'text/plain': textBlob, // Dành cho Notepad, thanh URL
+        'image/png': imgBlob,   // Dành cho Zalo, Messenger, Word
+      });
+
+      // 4. Ghi vào clipboard
+      await navigator.clipboard.write([item]);
+
+      alert('Đã copy!');
+
+    } catch (err) {
+      console.error('Smart copy failed:', err);
+
+      navigator.clipboard.writeText(shareLink);
+      alert('Trình duyệt không hỗ trợ copy ảnh, đã copy link thay thế.');
+    }
+  };
+
+
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-slate-900 text-white p-4">
@@ -87,7 +122,7 @@ export default function Home() {
                 Download Ảnh
               </button>
               <button
-                onClick={copyLink}
+                onClick={copySmart}
                 className="flex-1 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-medium transition"
               >
                 Copy Link Share
