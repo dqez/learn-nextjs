@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ClientButton } from "./components/Button";
+import { ClientButton } from "./components/ClientButton";
 
 export default function Home() {
 
