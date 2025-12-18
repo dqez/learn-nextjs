@@ -1,21 +1,12 @@
-import Link from "next/link";
-
 interface Post {
   id: number;
   title: string;
   body: string;
 }
 
-const dummyPosts = [
-  { id: 1, title: "Bài viết 1: Giới thiệu Next.js", excerpt: "Học về Server Components..." },
-  { id: 2, title: "Bài viết 2: Tailwind CSS", excerpt: "Style ứng dụng nhanh chóng..." },
-  { id: 3, title: "Bài viết 3: Dynamic Routing", excerpt: "Tạo trang chi tiết sản phẩm..." },
-  { id: 4, title: "Bài viết 4: React Hook", excerpt: "Ôn tập kiến thức useEffect..." },
-];
-
 export default async function BlogListPage() {
 
-  const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=6');
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=6', { next: { revalidate: 60 } });
 
   if (!response.ok) {
     throw new Error('Không thể lấy dữ liệu từ máy chủ');
