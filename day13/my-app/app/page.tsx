@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import UserForm from "./components/UserForm";
 
 export default async function Home() {
 
@@ -16,6 +17,7 @@ export default async function Home() {
         ))}
       </ul>
       {users.length === 0 && <p>Chưa có dữ liệu.</p>}
+      <UserForm />
     </div>
   )
 }
